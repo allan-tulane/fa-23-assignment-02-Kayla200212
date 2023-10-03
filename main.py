@@ -47,7 +47,27 @@ def pad(x,y):
 
 def subquadratic_multiply(x, y):
     ### TODO
-    pass
+  #almost the same as the _quadratic_multiply from lab 3
+    yvec = y.binary_vec
+    xvec = x.binary_vec
+
+    xvec, yvec = pad(xvec, yvec)
+
+    if x.decimal_val <= 1 and y.decimal_val <=1: #base case is if both are <=1
+      return BinaryNumber(x.decimal_val * y.decimal_val)#then return their prod
+
+    x_left, x_right = split_number(xvec)
+    y_left, y_right = split_number(yvec)#split both into halves
+    
+    prod1 = subquadratic_multiply(x_left, y_left)
+    prod2 = subquadratic_multiply(x_left, y_right)
+    prod3 = subquadratic_multiply(x_right, y_left)
+    prod4 = subquadratic_multiply(x_right, y_right)
+    #Use `bit_shift` to do the 2^n and 2^{n/2} multiplications.
+    exp = bit_shift(BinaryNumber(2), len(xvec)).decimal_val#2^n
+    exp2 = bit_shift(BinaryNumber(2), len(xvec)//2).decimal_val#2^n/2
+    #combine it all
+    return exp*prod1 + exp2*(prod2+prod3)+prod4
     ###
 
 

@@ -37,7 +37,7 @@ the root is f(n) which is 1, level 1 is 2*(n/3)+1 showing geometric shrinking at
 .  
 .  
   * $W(n)=49W(n/25)+n^{3/2}*log n$
-.  root is n^(3/2)logn, level 1 is 49*((n/25)^(3/2)*log(n/25)) since we have to plug n/25 into both instances of n in n^2/3*logn. simplifying: 49*(n^(2/3)/125)log(n/25)=>(49/125)(n^(2/3))(logn/25). this shows decreasing leafs, so it is root dominated so O(n^(3/2)log(n)) 
+.  root is n^(3/2)logn, level 1 is 49*((n/25)^(3/2)*log(n/25)) since we have to plug n/25 into both instances of n in n^2/3*logn. simplifying: 49*(n^(2/3)/125)log(n/25)=>(49/125)(n^(2/3))(logn/25). this shows decreasing leafs, so it is root dominated so multiplying the function height by the work gives O(n^(3/2)log(n)) 
 .  
 .  
 .  
@@ -64,19 +64,29 @@ root is 1, level 1 is 1+sqrt(n), level 2 is 1+1+(n^1/4)...work will be n^1/2i an
   * Algorithm $\mathcal{A}$ solves problems by dividing them into
       five subproblems of half the size, recursively solving each
       subproblem, and then combining the solutions in linear time.
+
+  W(n)=5W(n/2)+n
+  root is n, level 1 is (5n/2) which shows geometric growth. for each leaf 5^lgn which simplifies to O(n^lg(5))
     
   * Algorithm $\mathcal{B}$ solves problems of size $n$ by
       recursively solving two subproblems of size $n-1$ and then
       combining the solutions in constant time.
+
+  W(n)=2W(n-1)+1
+  root is 1, level 1 is (2*(n-1)+1). this shows geometric growth where (n-1)^i=1 solves to be O(2^n)
     
   * Algorithm $\mathcal{C}$ solves problems of size $n$ by dividing
       them into nine subproblems of size $n/3$, recursively solving
       each subproblem, and then combining the solutions in $O(n^2)$
       time.
 
+  W(n)=9W(n/3)+n^2
+  root is n^2, level 1 is 9(n/3)^2 which simplifies into n^2. n^log_3(9)=n^2 which is the same as our function, we know it is balanced. num levels is log_3n and max work is n^2 per level so together O(n^2log_3n)
+
     What are the asymptotic running times of each of these algorithms?
     Which algorithm would you choose?
-
+  The worst of these is algorithm b, which is exponential. Algorithms A and C are closer as both are functions of n what change in their constants that has the powers of n. so we compare algorithm a and algorithm c:
+  n^lg5 vs (n^2)*(log_3(n)). the former is still an exponential growth rate that depends on n. it grows slower than that of B, but since the exponent depends on input n, it can be hindered by larger inputs. the later is dominated by n^2 which is also not ideal, but not as hindered by large inputs as the former. so, we should pick algorithm C.
 
 3. Now that you have some practice solving recurrences, let's work on implementing some algorithms. In lecture we discussed a divide and conquer algorithm for integer multiplication. This algorithm takes as input two $n$-bit strings $x = \langle x_L, x_R\rangle$ and $y=\langle y_L, y_R\rangle$ and computes the product $xy$ by using the fact that $xy = 2^{n/2}x_Ly_L + 2^{n/2}(x_Ly_R+x_Ry_L) +
   x_Ry_R.$ Use the
